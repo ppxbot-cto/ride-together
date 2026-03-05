@@ -1,0 +1,72 @@
+<!--pages/mine/mine.wxml-->
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-section card" wx:if="{{userInfo}}">
+    <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <text class="user-name">{{userInfo.nickName}}</text>
+  </view>
+
+  <view class="user-section card" wx:else>
+    <button class="login-btn btn-primary" bindtap="login">点击登录</button>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="tab-bar">
+    <view 
+      class="tab-item {{activeTab === 'published' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="published"
+    >
+      我发布的
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'joined' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="joined"
+    >
+      我加入的
+    </view>
+  </view>
+
+  <!-- 活动列表 -->
+  <view class="activity-list">
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+
+    <view wx:elif="{{activities.length === 0}}" class="empty">
+      <text class="empty-icon">📭</text>
+      <text>{{activeTab === 'published' ? '还没有发布过活动' : '还没有加入过活动'}}</text>
+    </view>
+
+    <view wx:else>
+      <view 
+        wx:for="{{activities}}" 
+        wx:key="_id" 
+        class="activity-card card"
+        bindtap="goDetail"
+        data-id="{{item._id}}"
+      >
+        <view class="activity-header">
+          <view class="activity-type tag tag-{{item.type}}">
+            {{item.type === 'motorcycle' ? '🏍️ 摩托车' : '🚴 自行车'}}
+          </view>
+          <text class="activity-time">{{item.meetTime}}</text>
+        </view>
+
+        <view class="activity-title">{{item.title}}</view>
+
+        <view class="activity-info">
+          <text class="info-item">📍 {{item.meetLocation}}</text>
+        </view>
+
+        <view class="activity-footer">
+          <text class="participants-count">👥 {{item.participants.length}}/{{item.maxParticipants}}</text>
+          <text wx:if="{{activeTab === 'published'}}" class="status-badge status-{{item.status}}">
+            {{item.status === 'active' ? '进行中' : (item.status === 'completed' ? '已结束' : '已取消')}}
+          </text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

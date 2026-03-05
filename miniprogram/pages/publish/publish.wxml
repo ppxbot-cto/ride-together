@@ -1,0 +1,106 @@
+<!--pages/publish/publish.wxml-->
+<view class="container">
+  <view class="publish-form card">
+    <!-- 车型选择 -->
+    <view class="input-group">
+      <view class="input-label">车型类型 *</view>
+      <view class="type-selector">
+        <view 
+          class="type-option {{form.type === 'motorcycle' ? 'active' : ''}}"
+          bindtap="selectType"
+          data-type="motorcycle"
+        >
+          🏍️ 摩托车
+        </view>
+        <view 
+          class="type-option {{form.type === 'bicycle' ? 'active' : ''}}"
+          bindtap="selectType"
+          data-type="bicycle"
+        >
+          🚴 自行车
+        </view>
+      </view>
+    </view>
+
+    <!-- 活动标题 -->
+    <view class="input-group">
+      <view class="input-label">活动标题 *</view>
+      <input 
+        class="input-field" 
+        placeholder="例如：周末西湖骑行"
+        value="{{form.title}}"
+        bindinput="onInput"
+        data-field="title"
+        maxlength="50"
+      />
+    </view>
+
+    <!-- 集合时间 -->
+    <view class="input-group">
+      <view class="input-label">集合时间 *</view>
+      <picker mode="multiSelector" range="{{timeRange}}" value="{{timeIndex}}" bindchange="onTimeChange">
+        <view class="input-field picker-value">
+          {{form.meetTime || '请选择时间'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 集合地点 -->
+    <view class="input-group">
+      <view class="input-label">集合地点 *</view>
+      <input 
+        class="input-field" 
+        placeholder="例如：西湖断桥"
+        value="{{form.meetLocation}}"
+        bindinput="onInput"
+        data-field="meetLocation"
+        maxlength="100"
+      />
+    </view>
+
+    <!-- 路线描述 -->
+    <view class="input-group">
+      <view class="input-label">路线描述</view>
+      <input 
+        class="input-field" 
+        placeholder="例如：断桥→白堤→苏堤→雷峰塔"
+        value="{{form.route}}"
+        bindinput="onInput"
+        data-field="route"
+        maxlength="200"
+      />
+    </view>
+
+    <!-- 详细说明 -->
+    <view class="input-group">
+      <view class="input-label">详细说明</view>
+      <textarea 
+        class="input-field textarea" 
+        placeholder="补充说明：骑行距离、难度、注意事项等"
+        value="{{form.description}}"
+        bindinput="onInput"
+        data-field="description"
+        maxlength="500"
+        auto-height
+      />
+    </view>
+
+    <!-- 最大人数 -->
+    <view class="input-group">
+      <view class="input-label">最大人数（可选）</view>
+      <input 
+        class="input-field" 
+        type="number"
+        placeholder="不填则无限制"
+        value="{{form.maxParticipants}}"
+        bindinput="onInput"
+        data-field="maxParticipants"
+      />
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="btn-primary submit-btn" bindtap="submitForm" disabled="{{submitting}}">
+      {{submitting ? '发布中...' : '发布活动'}}
+    </button>
+  </view>
+</view>

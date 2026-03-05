@@ -1,0 +1,73 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view 
+      class="filter-item {{filterType === 'all' ? 'active' : ''}}" 
+      bindtap="changeFilter" 
+      data-type="all"
+    >
+      全部
+    </view>
+    <view 
+      class="filter-item {{filterType === 'motorcycle' ? 'active' : ''}}" 
+      bindtap="changeFilter" 
+      data-type="motorcycle"
+    >
+      🏍️ 摩托车
+    </view>
+    <view 
+      class="filter-item {{filterType === 'bicycle' ? 'active' : ''}}" 
+      bindtap="changeFilter" 
+      data-type="bicycle"
+    >
+      🚴 自行车
+    </view>
+  </view>
+
+  <!-- 活动列表 -->
+  <view class="activity-list">
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+
+    <view wx:elif="{{activities.length === 0}}" class="empty">
+      <text class="empty-icon">📭</text>
+      <text>暂无活动</text>
+      <text style="font-size: 24rpx; margin-top: 20rpx;">点击下方按钮发布第一个活动吧</text>
+    </view>
+
+    <view wx:else>
+      <view 
+        wx:for="{{activities}}" 
+        wx:key="_id" 
+        class="activity-card card"
+        bindtap="goDetail"
+        data-id="{{item._id}}"
+      >
+        <view class="activity-header">
+          <view class="activity-type tag tag-{{item.type}}">
+            {{item.type === 'motorcycle' ? '🏍️ 摩托车' : '🚴 自行车'}}
+          </view>
+          <text class="activity-time">{{item.meetTime}}</text>
+        </view>
+
+        <view class="activity-title">{{item.title}}</view>
+
+        <view class="activity-info">
+          <text class="info-item">📍 {{item.meetLocation}}</text>
+        </view>
+
+        <view class="activity-footer">
+          <view class="organizer">
+            <image class="avatar" src="{{item.organizer.avatarUrl}}" mode="aspectFill"></image>
+            <text class="nickname">{{item.organizer.nickname}}</text>
+          </view>
+          <view class="participants-count">
+            <text>👥 {{item.participants.length}}/{{item.maxParticipants}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,92 @@
+<!--pages/detail/detail.wxml-->
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <view wx:else class="activity-detail">
+    <!-- 活动类型标签 -->
+    <view class="type-tag tag tag-{{activity.type}}">
+      {{activity.type === 'motorcycle' ? '🏍️ 摩托车' : '🚴 自行车'}}
+    </view>
+
+    <!-- 活动标题 -->
+    <view class="title">{{activity.title}}</view>
+
+    <!-- 组织者信息 -->
+    <view class="organizer-section card">
+      <view class="section-title">👤 组织者</view>
+      <view class="organizer-info">
+        <image class="organizer-avatar" src="{{activity.organizer.avatarUrl}}" mode="aspectFill"></image>
+        <text class="organizer-name">{{activity.organizer.nickname}}</text>
+      </view>
+    </view>
+
+    <!-- 活动信息 -->
+    <view class="info-section card">
+      <view class="section-title">📋 活动信息</view>
+      <view class="info-item">
+        <text class="info-label">集合时间</text>
+        <text class="info-value">{{activity.meetTime}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">集合地点</text>
+        <text class="info-value">{{activity.meetLocation}}</text>
+      </view>
+      <view class="info-item" wx:if="{{activity.route}}">
+        <text class="info-label">路线</text>
+        <text class="info-value">{{activity.route}}</text>
+      </view>
+      <view class="info-item" wx:if="{{activity.description}}">
+        <text class="info-label">详细说明</text>
+        <text class="info-value description">{{activity.description}}</text>
+      </view>
+    </view>
+
+    <!-- 参与者 -->
+    <view class="participants-section card">
+      <view class="section-title">
+        👥 参与者 
+        <text class="count">({{activity.participants.length}}/{{activity.maxParticipants}})</text>
+      </view>
+      <view class="participants-list">
+        <view wx:for="{{activity.participants}}" wx:key="openid" class="participant">
+          <image class="participant-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+          <text class="participant-name">{{item.nickname}}</text>
+        </view>
+        <view wx:if="{{activity.participants.length === 0}}" class="no-participants">
+          还没有人报名，快来加入吧！
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-bar">
+      <button 
+        wx:if="{{!isOrganizer && !hasJoined}}"
+        class="btn-primary action-btn" 
+        bindtap="joinActivity"
+        disabled="{{activity.participants.length >= activity.maxParticipants || joining}}"
+      >
+        {{activity.participants.length >= activity.maxParticipants ? '已满员' : (joining ? '加入中...' : '立即加入')}}
+      </button>
+
+      <button 
+        wx:if="{{!isOrganizer && hasJoined}}"
+        class="btn-secondary action-btn" 
+        bindtap="cancelJoin"
+        disabled="{{cancelling}}"
+      >
+        {{cancelling ? '取消中...' : '取消报名'}}
+      </button>
+
+      <button 
+        wx:if="{{isOrganizer}}"
+        class="btn-secondary action-btn" 
+        disabled
+      >
+        你是组织者
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,98 @@
+/* pages/index/index.wxss */
+
+.filter-bar {
+  display: flex;
+  background-color: #ffffff;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  border-radius: 16rpx;
+}
+
+.filter-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #666;
+  border-radius: 8rpx;
+  transition: all 0.3s;
+}
+
+.filter-item.active {
+  background-color: #07c160;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.activity-list {
+  padding-bottom: 40rpx;
+}
+
+.activity-card {
+  transition: all 0.2s;
+}
+
+.activity-card:active {
+  transform: scale(0.98);
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.activity-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.activity-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-info {
+  margin-bottom: 20rpx;
+}
+
+.info-item {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.activity-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.organizer {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  margin-right: 12rpx;
+}
+
+.nickname {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.participants-count {
+  font-size: 26rpx;
+  color: #999;
+}
