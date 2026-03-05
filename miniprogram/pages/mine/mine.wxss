@@ -14,6 +14,22 @@
   margin-bottom: 20rpx;
 }
 
+.user-avatar.placeholder {
+  background: linear-gradient(135deg, #07c160 0%, #06ad56 100%);
+  color: #fff;
+  font-size: 48rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-tip {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+}
+
 .user-name {
   font-size: 36rpx;
   font-weight: 600;

@@ -1,13 +1,19 @@
 <!--pages/mine/mine.wxml-->
 <view class="container">
-  <!-- 用户信息 -->
+  <!-- 用户信息（自动登录，无需点击） -->
   <view class="user-section card" wx:if="{{userInfo}}">
-    <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" wx:if="{{userInfo.avatarUrl}}"></image>
+    <view class="user-avatar placeholder" wx:else>骑</view>
     <text class="user-name">{{userInfo.nickName}}</text>
   </view>
 
+  <view class="user-section card" wx:elif="{{loginLoading}}">
+    <text class="login-tip">登录中...</text>
+  </view>
+
   <view class="user-section card" wx:else>
-    <button class="login-btn btn-primary" bindtap="login">点击登录</button>
+    <text class="login-tip">登录失败</text>
+    <button class="login-btn btn-primary" bindtap="autoLogin">重试</button>
   </view>
 
   <!-- Tab 切换 -->

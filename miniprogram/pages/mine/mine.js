@@ -6,11 +6,12 @@ Page({
     userInfo: null,
     activeTab: 'published', // published | joined
     activities: [],
-    loading: true
+    loading: true,
+    loginLoading: true  // 自动登录中
   },
 
   onLoad: function () {
-    this.checkLogin();
+    this.autoLogin();
   },
 
   onShow: function () {
@@ -19,35 +20,39 @@ Page({
     }
   },
 
-  // 检查登录状态
-  checkLogin: function () {
-    const userInfo = app.globalData.userInfo;
-    if (userInfo) {
-      this.setData({ userInfo });
+  // 自动登录（微信云开发静默登录，无需用户点击）
+  autoLogin: function () {
+    const cached = app.globalData.userInfo;
+    if (cached) {
+      this.setData({ userInfo: cached, loginLoading: false });
       this.getMyActivities();
+      return;
     }
-  },
 
-  // 登录
-  login: function () {
+    this.setData({ loginLoading: true });
     wx.cloud.callFunction({
       name: 'login'
     }).then(res => {
-      console.log('登录成功', res);
-      // 获取用户信息
-      wx.getUserProfile({
-        desc: '用于完善用户资料',
-        success: (res) => {
-          const userInfo = res.userInfo;
-          app.globalData.userInfo = userInfo;
-          this.setData({ userInfo });
-          this.getMyActivities();
-        }
-      });
+      const result = res.result || {};
+      if (!result.success) {
+        this.setData({ loginLoading: false });
+        wx.showToast({ title: '登录失败', icon: 'none' });
+        return;
+      }
+      const user = result.user || {};
+      const userInfo = {
+        nickName: user.nickname || '骑友',
+        avatarUrl: user.avatarUrl || ''
+      };
+      app.globalData.userInfo = userInfo;
+      app.globalData.openid = result.openid;
+      this.setData({ userInfo, loginLoading: false });
+      this.getMyActivities();
     }).catch(err => {
       console.error('登录失败', err);
+      this.setData({ loginLoading: false });
       wx.showToast({
-        title: '登录失败',
+        title: '登录失败，请重试',
         icon: 'none'
       });
     });
