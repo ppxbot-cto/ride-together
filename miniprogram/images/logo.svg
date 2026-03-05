@@ -1,0 +1,80 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景渐变 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#07c160;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06ad56;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="ringGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e8f5e9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="ringGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 圆角背景 -->
+  <rect x="0" y="0" width="512" height="512" rx="100" fill="url(#bgGradient)"/>
+  
+  <!-- 无限符号 ∞ 变形 - 双环相连 -->
+  <g filter="url(#glow)">
+    <!-- 左环（白色） -->
+    <path d="M 256 256 
+             C 256 256, 180 180, 140 180 
+             C 100 180, 70 210, 70 256 
+             C 70 302, 100 332, 140 332 
+             C 180 332, 256 256, 256 256 
+             Z" 
+          fill="url(#ringGradient1)" 
+          opacity="0.95"/>
+    
+    <!-- 右环（金色） -->
+    <path d="M 256 256 
+             C 256 256, 332 332, 372 332 
+             C 412 332, 442 302, 442 256 
+             C 442 210, 412 180, 372 180 
+             C 332 180, 256 256, 256 256 
+             Z" 
+          fill="url(#ringGradient2)" 
+          opacity="0.9"/>
+    
+    <!-- 中心连接点 -->
+    <circle cx="256" cy="256" r="18" fill="#ffffff"/>
+    
+    <!-- 动感线条 - 左环内 -->
+    <path d="M 120 230 Q 150 256, 120 282" 
+          stroke="#07c160" 
+          stroke-width="4" 
+          fill="none" 
+          stroke-linecap="round"
+          opacity="0.6"/>
+    
+    <!-- 动感线条 - 右环内 -->
+    <path d="M 392 230 Q 362 256, 392 282" 
+          stroke="#FFA500" 
+          stroke-width="4" 
+          fill="none" 
+          stroke-linecap="round"
+          opacity="0.6"/>
+  </g>
+  
+  <!-- 底部小字（可选） -->
+  <text x="256" y="420" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="24" 
+        font-weight="500"
+        fill="#ffffff" 
+        text-anchor="middle" 
+        opacity="0.8">
+    一起骑
+  </text>
+</svg>
