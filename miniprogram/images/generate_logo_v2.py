@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-一起骑 Logo 生成器 v2 - 修复 PNG 生成问题
+骑行记 Logo 生成器 v2 - 修复 PNG 生成问题
 """
 
 import struct
@@ -38,7 +38,7 @@ def create_png(width, height, pixels):
     return signature + ihdr + idat + iend
 
 def generate_logo():
-    """生成一起骑 logo - 抽象双环设计"""
+    """生成骑行记 logo - 抽象双环设计"""
     width, height = 512, 512
     
     # 初始化像素（透明）

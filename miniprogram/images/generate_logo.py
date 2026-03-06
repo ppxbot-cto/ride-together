@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-一起骑 Logo 生成器
+骑行记 Logo 生成器
 生成 512x512 的 PNG logo（带透明背景圆角）
 """
 
@@ -38,7 +38,7 @@ def create_png(width, height, pixels):
     return signature + ihdr + idat + iend
 
 def generate_logo():
-    """生成一起骑 logo"""
+    """生成骑行记 logo"""
     width, height = 512, 512
     center_x, center_y = 256, 256
     
@@ -145,7 +145,7 @@ def generate_logo():
             pixels[y][x] = [255, 165, 0, 180]
             pixels[y][x+1] = [255, 165, 0, 180]
     
-    # 6. 添加文字"一起骑"（简单像素字体）
+    # 6. 添加文字"骑行记"（简单像素字体）
     # 由于像素字体复杂，这里用简单方式：在底部添加三个小圆点代表文字
     text_y = 400
     for i, x_pos in enumerate([220, 256, 292]):
