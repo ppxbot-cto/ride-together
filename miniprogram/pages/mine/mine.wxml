@@ -1,17 +1,41 @@
 <!--pages/mine/mine.wxml-->
 <view class="container">
-  <!-- 用户信息 -->
-  <view class="user-section card" wx:if="{{userInfo}}">
-    <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-    <text class="user-name">{{userInfo.nickName}}</text>
+  <!-- 未登录：显示登录按钮 -->
+  <view class="user-section card" wx:if="{{!userInfo}}">
+    <view class="login-btn-wrap">
+      <button class="login-main-btn" bindtap="tapLogin">微信登录</button>
+      <text class="login-hint">登录后可发布活动、加入活动、查看我的活动</text>
+    </view>
   </view>
 
+  <!-- 已登录：显示头像与昵称（仅来自微信，不可修改） -->
   <view class="user-section card" wx:else>
-    <button class="login-btn btn-primary" bindtap="login">点击登录</button>
+    <view class="profile-block">
+      <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" wx:if="{{userInfo.avatarUrl}}"></image>
+      <view class="user-avatar placeholder" wx:else>骑</view>
+      <text class="user-name-display">{{userInfo.nickName || '骑友'}}</text>
+      <text class="logout-btn" bindtap="logout">退出登录</text>
+    </view>
   </view>
 
-  <!-- Tab 切换 -->
-  <view class="tab-bar">
+  <!-- 登录弹窗：getUserProfile 失败时仅可选头像，昵称使用「骑友」 -->
+  <view class="login-sheet-mask" wx:if="{{showLoginSheet}}" catchtap="closeLoginSheet">
+    <view class="login-sheet" catchtap="">
+      <view class="login-sheet-title">设置头像</view>
+      <view class="login-sheet-desc">用于在活动中展示你的身份，昵称以微信为准</view>
+      <button class="login-sheet-avatar-btn" open-type="chooseAvatar" bindchooseavatar="onLoginSheetChooseAvatar">
+        <image class="login-sheet-avatar" src="{{loginForm.avatarPath}}" mode="aspectFill" wx:if="{{loginForm.avatarPath}}"></image>
+        <view class="login-sheet-avatar placeholder" wx:else>头像</view>
+      </button>
+      <view class="login-sheet-actions">
+        <button class="login-sheet-cancel" bindtap="closeLoginSheet">取消</button>
+        <button class="login-sheet-confirm" bindtap="confirmLoginSheet">确认登录</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab 切换（已登录才显示） -->
+  <view class="tab-bar" wx:if="{{userInfo}}">
     <view 
       class="tab-item {{activeTab === 'published' ? 'active' : ''}}"
       bindtap="switchTab"
@@ -28,8 +52,14 @@
     </view>
   </view>
 
-  <!-- 活动列表 -->
-  <view class="activity-list">
+  <!-- 未登录时提示 -->
+  <view class="activity-list need-login-tip" wx:if="{{!userInfo}}">
+    <text class="empty-icon">🔐</text>
+    <text>请先点击上方「微信登录」后再使用</text>
+  </view>
+
+  <!-- 活动列表（已登录） -->
+  <view class="activity-list" wx:else>
     <view wx:if="{{loading}}" class="loading">
       <text>加载中...</text>
     </view>

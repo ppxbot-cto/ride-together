@@ -98,6 +98,24 @@
       />
     </view>
 
+    <!-- 群/微信二维码（可选） -->
+    <view class="input-group">
+      <view class="input-label">群/微信二维码（可选）</view>
+      <view class="qrcode-hint">有群可上传群二维码，无群可上传个人微信二维码，方便车友扫码加群或加好友</view>
+      <view class="qrcode-upload">
+        <block wx:if="{{form.qrCodeTempPath}}">
+          <view class="qrcode-preview">
+            <image class="qrcode-img" src="{{form.qrCodeTempPath}}" mode="aspectFit" show-menu-by-longpress="{{true}}"></image>
+            <view class="qrcode-remove" bindtap="removeQrCode">移除</view>
+          </view>
+        </block>
+        <view wx:else class="qrcode-btn" bindtap="chooseQrCode">
+          <text class="qrcode-btn-icon">📷</text>
+          <text class="qrcode-btn-text">上传二维码</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 提交按钮 -->
     <button class="btn-primary submit-btn" bindtap="submitForm" disabled="{{submitting}}">
       {{submitting ? '发布中...' : '发布活动'}}

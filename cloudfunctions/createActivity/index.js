@@ -10,7 +10,7 @@ exports.main = async (event, context) => {
   const openid = wxContext.OPENID;
   const db = cloud.database();
   
-  const { title, type, meetTime, meetLocation, route, description, maxParticipants } = event;
+  const { title, type, meetTime, meetLocation, route, description, maxParticipants, qrCodeFileID } = event;
 
   // 参数验证
   if (!title || !type || !meetTime || !meetLocation) {
@@ -58,6 +58,7 @@ exports.main = async (event, context) => {
         route: route || '',
         description: description || '',
         maxParticipants: maxParticipants || 20,
+        qrCodeFileID: qrCodeFileID || '',
         organizer: userInfo,
         participants: [],
         status: 'active',

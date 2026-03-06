@@ -22,9 +22,11 @@ exports.main = async (event, context) => {
       _openid: openid
     }).get();
 
+    let user = { nickname: '骑友', avatarUrl: '' };
+
     if (userResult.data.length === 0) {
       // 新用户，创建记录
-      await users.add({
+      const addResult = await users.add({
         data: {
           _openid: openid,
           nickname: '骑友',
@@ -34,20 +36,28 @@ exports.main = async (event, context) => {
           lastLoginAt: db.serverDate()
         }
       });
+      user = { nickname: '骑友', avatarUrl: '', _id: addResult._id };
     } else {
-      // 老用户，更新最后登录时间
-      await users.doc(userResult.data[0]._id).update({
+      // 老用户，更新最后登录时间并返回用户信息
+      const doc = userResult.data[0];
+      await users.doc(doc._id).update({
         data: {
           lastLoginAt: db.serverDate()
         }
       });
+      user = {
+        nickname: doc.nickname || '骑友',
+        avatarUrl: doc.avatarUrl || '',
+        _id: doc._id
+      };
     }
 
     return {
       openid,
       appid,
       unionid,
-      success: true
+      success: true,
+      user
     };
   } catch (err) {
     console.error('登录失败', err);

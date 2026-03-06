@@ -69,20 +69,12 @@ cd ride-together
 5. 记录下**环境 ID**（类似：cloud1-xxx）
 
 ### 配置云开发环境
-编辑 `miniprogram/app.js`，找到：
+编辑 `miniprogram/app.js`，找到顶部的 `CLOUD_ENV_ID`：
 ```javascript
-wx.cloud.init({
-  traceUser: true,
-});
+const CLOUD_ENV_ID = '';  // 与微信开发者工具里 cloudfunctions 所选环境一致
 ```
-
-如果需要指定环境，改为：
-```javascript
-wx.cloud.init({
-  env: '你的环境 ID',
-  traceUser: true,
-});
-```
+- **若登录一直失败**：把云开发控制台里的「环境 ID」复制过来，填进引号内（如 `'cloud1-xxxx'`）。
+- 留空则使用默认环境（第一个创建的环境）。
 
 ---
 
@@ -115,6 +107,16 @@ wx.cloud.init({
 
 ## ☁️ 第五步：上传云函数
 
+### ⚠️ 必须先选择云环境（避免报错）
+
+若出现错误：**「请在编辑器云函数根目录（cloudfunctionRoot）选择一个云环境」**，按下面操作：
+
+1. 在微信开发者工具左侧文件树，找到 **`cloudfunctions`** 文件夹（云函数根目录）
+2. **右键点击** `cloudfunctions` 文件夹
+3. 在菜单中选择「**当前环境**」或「**选择云环境**」
+4. 在列表里选择你已开通的云环境（如 `ride-together` 或你的环境 ID）
+5. 选好后，`cloudfunctions` 旁会显示当前环境名称，再进行上传
+
 ### 上传步骤
 1. 在微信开发者工具左侧，找到 `cloudfunctions` 目录
 2. **右键点击** `cloudfunctions` 文件夹
@@ -125,6 +127,7 @@ wx.cloud.init({
 ```
 cloudfunctions/
 ├── login/                ✅
+├── updateUserProfile/    ✅ 更新用户头像、昵称（「我的」页使用）
 ├── createActivity/       ✅
 ├── getActivities/        ✅
 ├── joinActivity/         ✅
@@ -299,7 +302,14 @@ cloudfunctions/
 
 ## 🔧 常见问题
 
-### Q1: 云函数上传失败
+### Q1: 一直显示「登录失败」
+**A:** 按顺序检查：
+1. **云环境一致**：`miniprogram/app.js` 里 `CLOUD_ENV_ID` 须与开发者工具中「右键 cloudfunctions → 当前环境」一致；或先改为 `''` 使用默认环境试一下。
+2. **云函数已部署**：确认已上传并部署 `login` 云函数（云开发控制台 → 云函数 中能看到）。
+3. **数据库存在**：云开发控制台 → 数据库 中要有 `users` 集合。
+4. 看控制台报错：若提示与 env / environment 相关，多半是环境 ID 不一致。
+
+### Q2: 云函数上传失败
 **A:** 检查网络连接，或尝试：
 ```bash
 cd cloudfunctions/login
@@ -307,13 +317,13 @@ npm install
 # 然后重新上传
 ```
 
-### Q2: 数据库权限错误
+### Q3: 数据库权限错误
 **A:** 在云开发控制台检查集合权限，确保设置为「所有用户可读写」
 
-### Q3: 获取用户信息失败
+### Q4: 获取用户信息失败
 **A:** 微信要求用户主动授权，确保使用 `wx.getUserProfile` API
 
-### Q4: 审核被拒绝
+### Q5: 审核被拒绝
 **A:** 根据拒绝原因修改，常见问题：
 - 类目不符 → 调整类目
 - 缺少资质 → 补充材料
