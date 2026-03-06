@@ -4,14 +4,69 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60rpx 40rpx;
+  padding: 48rpx 32rpx 40rpx;
+  box-sizing: border-box;
+}
+
+/* 未登录：登录按钮 */
+.login-btn-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 40rpx 36rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.login-main-btn {
+  width: 100%;
+  max-width: 420rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 40rpx;
+  background: #07c160;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+  border-radius: 16rpx;
+  border: none;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.25);
+}
+
+.login-main-btn::after {
+  border: none;
+}
+
+.login-main-btn:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.login-hint {
+  margin-top: 24rpx;
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 24rpx;
+}
+
+/* 已登录：头像与昵称展示 */
+.profile-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .user-avatar {
   width: 120rpx;
   height: 120rpx;
   border-radius: 50%;
-  margin-bottom: 20rpx;
+  display: block;
+  margin-bottom: 16rpx;
 }
 
 .user-avatar.placeholder {
@@ -24,20 +79,137 @@
   justify-content: center;
 }
 
-.login-tip {
-  font-size: 28rpx;
-  color: #999;
+.user-name-display {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
   margin-bottom: 16rpx;
 }
 
-.user-name {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #333;
+.logout-btn {
+  font-size: 26rpx;
+  color: #999;
 }
 
-.login-btn {
-  width: 200rpx;
+/* 登录弹窗 */
+.login-sheet-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-sheet {
+  width: 560rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 48rpx 40rpx;
+  box-sizing: border-box;
+}
+
+.login-sheet-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 12rpx;
+}
+
+.login-sheet-desc {
+  font-size: 26rpx;
+  color: #999;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.login-sheet-avatar-btn {
+  display: block;
+  margin: 0 auto 24rpx;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.login-sheet-avatar-btn::after {
+  border: none;
+}
+
+.login-sheet-avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  display: block;
+}
+
+.login-sheet-avatar.placeholder {
+  background: #f0f0f0;
+  color: #999;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-sheet-nickname {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 24rpx;
+  margin-bottom: 40rpx;
+  font-size: 30rpx;
+  border: 1rpx solid #eee;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+}
+
+.login-sheet-actions {
+  display: flex;
+  gap: 24rpx;
+}
+
+.login-sheet-cancel,
+.login-sheet-confirm {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 30rpx;
+  border-radius: 12rpx;
+  border: none;
+}
+
+.login-sheet-cancel::after,
+.login-sheet-confirm::after {
+  border: none;
+}
+
+.login-sheet-cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.login-sheet-confirm {
+  background: #07c160;
+  color: #fff;
+}
+
+.need-login-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.need-login-tip .empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
 }
 
 .tab-bar {

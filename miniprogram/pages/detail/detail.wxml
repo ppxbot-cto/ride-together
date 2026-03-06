@@ -43,6 +43,18 @@
       </view>
     </view>
 
+    <!-- 群/微信二维码：扫码加群或加好友 -->
+    <view class="qrcode-section card" wx:if="{{activity.qrCodeFileID}}">
+      <view class="section-title">📱 扫码加群/加好友</view>
+      <view class="qrcode-tip">长按识别二维码，加群或加组织者好友</view>
+      <image 
+        class="qrcode-image" 
+        src="{{activity.qrCodeDisplayUrl || activity.qrCodeFileID}}" 
+        mode="aspectFit"
+        show-menu-by-longpress="{{true}}"
+      />
+    </view>
+
     <!-- 参与者 -->
     <view class="participants-section card">
       <view class="section-title">

@@ -13,6 +13,11 @@ Page({
   },
 
   onLoad: function (options) {
+    if (!app.globalData.userInfo) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      wx.switchTab({ url: '/pages/mine/mine' });
+      return;
+    }
     const id = options.id;
     this.setData({ activityId: id });
     this.getActivityDetail(id);
@@ -23,23 +28,29 @@ Page({
     this.setData({ loading: true });
 
     const db = wx.cloud.database();
-    
+
     db.collection('activities').doc(id).get().then(res => {
       const activity = res.data;
-      
-      // 检查是否是组织者或已加入
       this.checkUserStatus(activity);
-      
-      this.setData({
-        activity: activity,
-        loading: false
-      });
+
+      if (activity.qrCodeFileID) {
+        wx.cloud.getTempFileURL({
+          fileList: [activity.qrCodeFileID]
+        }).then(fileRes => {
+          const item = fileRes.fileList[0];
+          if (item.tempFileURL) {
+            activity.qrCodeDisplayUrl = item.tempFileURL;
+          }
+          this.setData({ activity, loading: false });
+        }).catch(() => {
+          this.setData({ activity, loading: false });
+        });
+      } else {
+        this.setData({ activity, loading: false });
+      }
     }).catch(err => {
       console.error('获取活动详情失败', err);
-      wx.showToast({
-        title: '加载失败',
-        icon: 'none'
-      });
+      wx.showToast({ title: '加载失败', icon: 'none' });
       this.setData({ loading: false });
     });
   },
@@ -63,6 +74,11 @@ Page({
 
   // 加入活动
   joinActivity: function () {
+    if (!getApp().globalData.userInfo) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      wx.switchTab({ url: '/pages/mine/mine' });
+      return;
+    }
     if (this.data.activity.participants.length >= this.data.activity.maxParticipants) {
       wx.showToast({ title: '已满员', icon: 'none' });
       return;

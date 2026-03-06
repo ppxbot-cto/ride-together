@@ -9,10 +9,20 @@ Page({
   },
 
   onLoad: function () {
+    if (!app.globalData.userInfo) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      wx.switchTab({ url: '/pages/mine/mine' });
+      return;
+    }
     this.getActivities();
   },
 
   onShow: function () {
+    if (!app.globalData.userInfo) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      wx.switchTab({ url: '/pages/mine/mine' });
+      return;
+    }
     this.getActivities();
   },
 

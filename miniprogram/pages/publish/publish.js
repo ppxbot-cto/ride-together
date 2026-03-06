@@ -10,7 +10,8 @@ Page({
       meetLocation: '',
       route: '',
       description: '',
-      maxParticipants: ''
+      maxParticipants: '',
+      qrCodeTempPath: ''  // 选的二维码临时路径，提交时上传云存储
     },
     timeRange: [],
     timeIndex: [0, 0],
@@ -18,7 +19,20 @@ Page({
   },
 
   onLoad: function () {
+    if (!app.globalData.userInfo) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      wx.switchTab({ url: '/pages/mine/mine' });
+      return;
+    }
     this.initTimePicker();
+  },
+
+  onShow: function () {
+    if (!app.globalData.userInfo) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      wx.switchTab({ url: '/pages/mine/mine' });
+      return;
+    }
   },
 
   // 初始化时间选择器
@@ -66,6 +80,26 @@ Page({
     });
   },
 
+  // 选择群/微信二维码
+  chooseQrCode: function () {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera']
+    }).then(res => {
+      const path = res.tempFiles[0].tempFilePath;
+      this.setData({ 'form.qrCodeTempPath': path });
+    }).catch(err => {
+      if (err.errMsg && !err.errMsg.includes('cancel')) {
+        wx.showToast({ title: '选择图片失败', icon: 'none' });
+      }
+    });
+  },
+
+  removeQrCode: function () {
+    this.setData({ 'form.qrCodeTempPath': '' });
+  },
+
   // 时间选择
   onTimeChange: function (e) {
     const values = e.detail.value;
@@ -88,6 +122,12 @@ Page({
 
   // 提交表单
   submitForm: function () {
+    if (!getApp().globalData.userInfo) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      wx.switchTab({ url: '/pages/mine/mine' });
+      return;
+    }
+
     const { form } = this.data;
 
     // 验证必填项
@@ -106,14 +146,20 @@ Page({
 
     this.setData({ submitting: true });
 
-    // 调用云函数创建活动
-    wx.cloud.callFunction({
-      name: 'createActivity',
-      data: {
-        ...form,
-        maxParticipants: form.maxParticipants ? parseInt(form.maxParticipants) : 20
-      }
-    }).then(res => {
+    const doCreate = (qrCodeFileID) => {
+      wx.cloud.callFunction({
+        name: 'createActivity',
+        data: {
+          type: form.type,
+          title: form.title.trim(),
+          meetTime: form.meetTime,
+          meetLocation: form.meetLocation.trim(),
+          route: (form.route || '').trim(),
+          description: (form.description || '').trim(),
+          maxParticipants: form.maxParticipants ? parseInt(form.maxParticipants) : 20,
+          qrCodeFileID: qrCodeFileID || ''
+        }
+      }).then(res => {
       console.log('创建成功', res);
       wx.showToast({
         title: '发布成功',
@@ -134,5 +180,20 @@ Page({
       });
       this.setData({ submitting: false });
     });
+    };
+
+    if (form.qrCodeTempPath) {
+      const cloudPath = 'qrcode/' + Date.now() + '_' + Math.random().toString(36).slice(2) + '.jpg';
+      wx.cloud.uploadFile({
+        cloudPath,
+        filePath: form.qrCodeTempPath
+      }).then(res => doCreate(res.fileID)).catch(err => {
+        console.error('二维码上传失败', err);
+        wx.showToast({ title: '二维码上传失败，是否继续发布？', icon: 'none', duration: 2000 });
+        setTimeout(() => doCreate(''), 500);
+      });
+    } else {
+      doCreate('');
+    }
   }
 });
